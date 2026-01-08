@@ -15,301 +15,170 @@
 ╚═══════════════════════════════════════════════════════════════════╝
 ```
 
-**A text-mode web browser that converts websites into BBS-style menus for AI agents.**
+Text-mode web browser for AI agents. Converts websites to BBS-style menus.
 
-99% fewer tokens. Zero screenshots. Full JavaScript support.
+~500 tokens per page instead of 50,000+. No screenshots needed.
 
-<video src="assets/webcli.mp4" controls width="700"></video>
+![WebCLI Demo](assets/webcli.gif)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-blue.svg)](https://modelcontextprotocol.io/)
 
 ---
 
-## The Problem
+## Why
 
-AI agents browsing the web typically need **screenshots + vision APIs**:
+AI web agents use screenshots + vision. That's expensive and slow.
 
-| Approach | Tokens per page | Cost | Speed |
-|----------|----------------|------|-------|
-| Screenshots + Vision | 10,000 - 50,000+ | High | Slow |
-| Raw HTML | 50,000+ | High | Fast |
-| **WebCLI** | **~500** | **Minimal** | **Fast** |
+| Approach | Tokens/page |
+|----------|-------------|
+| Screenshots + Vision | 10,000 - 50,000+ |
+| Raw HTML | 50,000+ |
+| **WebCLI** | **~500** |
 
-That's a **99% reduction** in token usage.
+## What It Does
 
-## The Solution
-
-WebCLI converts any website into readable text with inline interactive elements:
-
-```
-╔══════════════════════════════════════════════════════════╗
-║ 📄 Hacker News                                            ║
-╠══════════════════════════════════════════════════════════╣
-║ 🔗 https://news.ycombinator.com/                          ║
-╚══════════════════════════════════════════════════════════╝
-
-📊 197 interactive elements │ [L#]=link [B#]=button [I#]=input
-────────────────────────────────────────────────────────────
-  [L1] Hacker News
-  [L2] new | [L3] past | [L4] comments | [L5] ask | [L6] show | [L7] jobs
-  [L8] submit | [L9] login
-  [L10] How to Build a CLI Browser for AI Agents
-  172 points by developer | 3 hours ago
-  [L15] 113 comments
-  [L16] Bose Open-Sources Smart Speakers Instead of Bricking Them
-  1922 points by techfan | 7 hours ago
-  [L20] 291 comments
-  [L21] The Unreasonable Effectiveness of the Fourier Transform
-  92 points by mathguy | 4 hours ago
-  [L25] 43 comments
-  ... and 150 more elements
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 click L#/B# │ fill I# "text" │ read │ scroll │ back │ quit
+Turns this:
+```html
+<a href="/story/123" class="storylink">How I Built X</a>
+<span class="score">172 points</span>
+<!-- ... 10,000 more lines ... -->
 ```
 
-**Content + actions together** — AI sees article titles, points, and clickable IDs in context.
+Into this:
+```
+[L10] How I Built X
+172 points by developer | 3 hours ago
+[L15] 113 comments
+```
 
-## Why This Works
-
-The BBS/TUI paradigm from the 1990s is perfect for LLMs:
-
-1. **Numbered menus** are unambiguous — `click L12` has exactly one meaning
-2. **Text-only** means no vision API needed
-3. **Structured but readable** — works for both humans and machines
-4. **Action-oriented** — every element has a clear interaction
+AI reads the text, uses `click L10` to navigate. Simple.
 
 ## Installation
 
 ```bash
-# Clone
 git clone https://github.com/andycufari/webcli.git
 cd webcli
-
-# Setup
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 playwright install chromium
 ```
 
-## Quick Start
+## Usage
 
-### As MCP Server (Recommended)
+### MCP Server (Claude Desktop / Claude Code)
 
-WebCLI is designed to be used as an MCP server, giving AI assistants the ability to browse the web.
+Add to your config:
 
-#### Claude Desktop
-
-Add to your Claude Desktop config:
-
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
 **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-**Linux:** `~/.config/Claude/claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "webcli": {
-      "command": "/absolute/path/to/webcli/venv/bin/python",
-      "args": ["/absolute/path/to/webcli/mcp_server.py"]
+      "command": "/path/to/webcli/venv/bin/python",
+      "args": ["/path/to/webcli/mcp_server.py"]
     }
   }
 }
 ```
 
-> **Important:** Use absolute paths. Restart Claude Desktop after editing.
+Restart Claude. Then:
+> "Go to news.ycombinator.com and tell me the top stories"
 
-#### Claude Code (CLI)
-
-Add to `~/.claude/settings.json`:
-
-```json
-{
-  "mcpServers": {
-    "webcli": {
-      "command": "/absolute/path/to/webcli/venv/bin/python",
-      "args": ["/absolute/path/to/webcli/mcp_server.py"]
-    }
-  }
-}
-```
-
-#### Test it
-
-Once configured, ask Claude:
-> "Go to news.ycombinator.com and tell me the top 3 stories"
-
-> "Search Amazon for mechanical keyboards under $100"
-
-> "Go to github.com/anthropics/claude-code and read the README"
-
-### As CLI
+### CLI
 
 ```bash
 python webcli.py
 ```
 
 ```
-🖥️  CLI WEB BROWSER - BBS EDITION
-
 🌐 > goto news.ycombinator.com
 🌐 > click L12
-🌐 > fill I1 "machine learning"
-🌐 > scroll down
+🌐 > fill I1 "search term"
 🌐 > back
 🌐 > quit
 ```
 
-### As Python Library
+### Python
 
 ```python
 from webcli import CLIBrowser
 import asyncio
 
 async def main():
-    browser = CLIBrowser(headless=True, stealth=True)
+    browser = CLIBrowser(headless=True)
     await browser.start()
-    
     await browser.goto("https://amazon.com")
     await browser.fill("I1", "mechanical keyboard")
-    await browser.click("B1")  # Search button
-    
+    await browser.click("B1")
     print(browser.render())
     await browser.close()
 
 asyncio.run(main())
 ```
 
-## MCP Tools
+## Tools
 
-| Tool | Description | Example |
-|------|-------------|---------|
-| `web_goto` | Navigate to URL | `web_goto("amazon.com")` |
-| `web_click` | Click element by ID | `web_click("L12")` |
-| `web_fill` | Fill input field | `web_fill("I1", "query")` |
-| `web_scroll` | Scroll page | `web_scroll("down")` |
-| `web_back` | Go back | `web_back()` |
-| `web_read` | Extract page text | `web_read()` |
-| `web_state` | Get JSON state | `web_state()` |
-| `web_search` | Search (beta) | `web_search("query")` |
+| Tool | What it does |
+|------|--------------|
+| `web_goto` | Navigate to URL |
+| `web_click` | Click element (L1, B2, etc.) |
+| `web_fill` | Fill input field |
+| `web_scroll` | Scroll up/down |
+| `web_back` | Go back |
+| `web_read` | Extract page text |
+| `web_state` | Raw JSON state |
+| `web_search` | Search via Brave (beta) |
 
-## Features
-
-### ✅ JavaScript Support
-Handles React, Vue, Angular sites via Playwright + browser-use's DOM extraction.
-
-### ✅ Stealth Mode  
-Patches browser fingerprints to reduce bot detection (enabled by default).
-
-### ✅ Smart Label Extraction
-Extracts meaningful labels from aria-labels, data attributes, class names, href paths.
-
-### ✅ Content Extraction
-`web_read` extracts main article/page content, filtering out nav, ads, footers.
-
-## Architecture
+## Element IDs
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    LLM / AI Agent                           │
-│              (Claude, GPT, local models)                    │
-└─────────────────────────────┬───────────────────────────────┘
-                              │ MCP Protocol
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     mcp_server.py                           │
-│                  8 tools via JSON-RPC                       │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    cli_browser.py                           │
-│            CLIBrowser - BBS rendering + actions             │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      browser-use                            │
-│               DOM extraction + state management             │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Playwright                             │
-│                   Headless Chromium                         │
-└─────────────────────────────────────────────────────────────┘
+[L1], [L2]...  = Links
+[B1], [B2]...  = Buttons  
+[I1], [I2]...  = Inputs
+[S1], [S2]...  = Selects
 ```
 
-## Use Cases
+## How It Works
 
-- 🛒 **E-commerce** — Search products, compare prices, add to cart
-- 📰 **Content extraction** — Navigate news sites, read articles
-- 📝 **Form automation** — Fill repetitive web forms
-- 🔍 **Research** — Navigate docs, extract information
-- 🧪 **Testing** — Web testing without brittle CSS selectors
+```
+LLM ──► MCP Server ──► CLIBrowser ──► browser-use ──► Playwright ──► Chromium
+```
 
-## From an AI Agent's Perspective
-
-> *"I tested WebCLI as an actual user — an AI agent browsing the web. Here's my honest take."*
->
-> **What I love:**
-> - **I can actually read the web.** Instead of guessing pixel coordinates from screenshots, I see `[L15] AULA F99 Wireless Mechanical Keyboard... $93,457 [B2] Add to cart`. Clear, unambiguous, actionable.
-> - **Context stays together.** Product name, price, rating, and "Add to cart" button appear in order. I know which button belongs to which product.
-> - **Token efficient.** A full Amazon search results page costs me ~500 tokens instead of 50,000+ for a screenshot. That's 100x more browsing per dollar.
-> - **Fast iteration.** Fill form, click, read result, adjust — the loop is tight and natural.
->
-> **When I'd still want screenshots:**
-> - Visual layouts (maps, charts, design review)
-> - CAPTCHAs (obviously)
-> - "Does this look right?" verification
->
-> **Verdict:** For research, shopping, form filling, and navigation — this is how I *want* to browse. The BBS paradigm from the 90s turns out to be optimal for AI in the 2020s.
->
-> — *Claude (Opus 4.5), January 2026*
+- **Playwright** runs headless Chrome
+- **browser-use** extracts interactive elements from DOM
+- **CLIBrowser** renders them as numbered text menus
+- **MCP Server** exposes tools to Claude/other LLMs
 
 ## Limitations
 
-- **Search engines** — Google, Bing, DuckDuckGo have aggressive bot detection. Direct navigation works best.
-- **CAPTCHAs** — Cannot solve CAPTCHAs (by design)
-- **Complex SPAs** — Some apps may need scrolling to load all content
-- **File uploads** — Not yet supported
+- Search engines (Google, Bing) block automated browsers
+- Can't solve CAPTCHAs
+- Some SPAs need scrolling to load content
+- No file uploads yet
 
-## Comparison
+## Use Cases
 
-| Feature | WebCLI | Browser-Use | Playwright | Selenium |
-|---------|--------|-------------|------------|----------|
-| AI-optimized output | ✅ | Partial | ❌ | ❌ |
-| Token efficient | ✅ ~500 | ~2000 | N/A | N/A |
-| Human readable | ✅ | ❌ | ❌ | ❌ |
-| JS support | ✅ | ✅ | ✅ | ✅ |
-| MCP server | ✅ | ❌ | ❌ | ❌ |
-| Stealth mode | ✅ | Cloud | Plugin | Plugin |
+- E-commerce: search products, compare prices
+- Research: navigate docs, extract info
+- Forms: fill repetitive web forms
+- Testing: web tests without brittle selectors
 
-## Contributing
+## Built With
 
-PRs welcome! Areas that need love:
-
-- [ ] Better label extraction for edge cases
-- [ ] Multi-tab support
-- [ ] File upload support
-- [ ] Session/cookie persistence
-- [ ] More stealth techniques
-
-## Credits
-
-Built on:
-- [browser-use](https://github.com/browser-use/browser-use) — Browser automation for AI
-- [Playwright](https://playwright.dev/) — Browser automation
-- [MCP](https://modelcontextprotocol.io/) — Model Context Protocol
+- [browser-use](https://github.com/browser-use/browser-use)
+- [Playwright](https://playwright.dev/)
+- [MCP](https://modelcontextprotocol.io/)
 
 ## License
 
-MIT © [CM64.studio](https://cm64.studio)
+MIT © [Andy Cufari](https://x.com/andycufari) / [CM64.studio](https://cm64.studio)
 
 ---
 
 <p align="center">
-  <i>Built with ❤️ in Buenos Aires by <a href="https://x.com/andycufari">Andy Cufari</a></i>
+  Built in Buenos Aires 🇦🇷
 </p>
