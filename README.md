@@ -19,6 +19,8 @@
 
 99% fewer tokens. Zero screenshots. Full JavaScript support.
 
+<video src="assets/webcli.mp4" controls width="700"></video>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-blue.svg)](https://modelcontextprotocol.io/)
 
