@@ -40,39 +40,36 @@ That's a **99% reduction** in token usage.
 
 ## The Solution
 
-WebCLI converts any website into simple numbered menus:
+WebCLI converts any website into readable text with inline interactive elements:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║ 📄 Hacker News                                           ║
+║ 📄 Hacker News                                            ║
 ╠══════════════════════════════════════════════════════════╣
-║ 🔗 https://news.ycombinator.com/                         ║
+║ 🔗 https://news.ycombinator.com/                          ║
 ╚══════════════════════════════════════════════════════════╝
 
-📊 Found 227 interactive elements
+📊 197 interactive elements │ [L#]=link [B#]=button [I#]=input
+────────────────────────────────────────────────────────────
+  [L1] Hacker News
+  [L2] new | [L3] past | [L4] comments | [L5] ask | [L6] show | [L7] jobs
+  [L8] submit | [L9] login
+  [L10] How to Build a CLI Browser for AI Agents
+  172 points by developer | 3 hours ago
+  [L15] 113 comments
+  [L16] Bose Open-Sources Smart Speakers Instead of Bricking Them
+  1922 points by techfan | 7 hours ago
+  [L20] 291 comments
+  [L21] The Unreasonable Effectiveness of the Fourier Transform
+  92 points by mathguy | 4 hours ago
+  [L25] 43 comments
+  ... and 150 more elements
 
-────────────────────────────────────────────────────────────
-🔗 LINKS (226 total)
-────────────────────────────────────────────────────────────
-  [L1  ] Hacker News
-  [L2  ] new
-  [L3  ] past
-  [L12 ] Show HN: I built a CLI browser for AI agents
-  [L13 ] github.com/user/webcli
-  ...
-
-────────────────────────────────────────────────────────────
-📝 INPUT FIELDS (1)
-────────────────────────────────────────────────────────────
-  [I1  ] search (text)
-
-💡 COMMANDS: click L12 | fill I1 "AI agents" | scroll down
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 click L#/B# │ fill I# "text" │ read │ scroll │ back │ quit
 ```
 
-- **`[L1]`, `[L2]`** = Links (clickable)
-- **`[B1]`, `[B2]`** = Buttons (clickable)  
-- **`[I1]`, `[I2]`** = Input fields (fillable)
-- **`[S1]`, `[S2]`** = Select dropdowns
+**Content + actions together** — AI sees article titles, points, and clickable IDs in context.
 
 ## Why This Works
 
