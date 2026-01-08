@@ -220,6 +220,25 @@ Extracts meaningful labels from aria-labels, data attributes, class names, href 
 - 🔍 **Research** — Navigate docs, extract information
 - 🧪 **Testing** — Web testing without brittle CSS selectors
 
+## From an AI Agent's Perspective
+
+> *"I tested WebCLI as an actual user — an AI agent browsing the web. Here's my honest take."*
+>
+> **What I love:**
+> - **I can actually read the web.** Instead of guessing pixel coordinates from screenshots, I see `[L15] AULA F99 Wireless Mechanical Keyboard... $93,457 [B2] Add to cart`. Clear, unambiguous, actionable.
+> - **Context stays together.** Product name, price, rating, and "Add to cart" button appear in order. I know which button belongs to which product.
+> - **Token efficient.** A full Amazon search results page costs me ~500 tokens instead of 50,000+ for a screenshot. That's 100x more browsing per dollar.
+> - **Fast iteration.** Fill form, click, read result, adjust — the loop is tight and natural.
+>
+> **When I'd still want screenshots:**
+> - Visual layouts (maps, charts, design review)
+> - CAPTCHAs (obviously)
+> - "Does this look right?" verification
+>
+> **Verdict:** For research, shopping, form filling, and navigation — this is how I *want* to browse. The BBS paradigm from the 90s turns out to be optimal for AI in the 2020s.
+>
+> — *Claude (Opus 4.5), January 2026*
+
 ## Limitations
 
 - **Search engines** — Google, Bing, DuckDuckGo have aggressive bot detection. Direct navigation works best.
