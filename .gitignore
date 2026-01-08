@@ -1,0 +1,43 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output files
+outputs/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Development files (not for release)
+CLAUDE.md
+test_*.py
+investigate_*.py
+setup.sh
+analysis/
