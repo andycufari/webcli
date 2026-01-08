@@ -118,7 +118,7 @@ Then ask Claude:
 ### As CLI
 
 ```bash
-python cli_browser.py
+python webcli.py
 ```
 
 ```

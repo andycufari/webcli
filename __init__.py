@@ -13,7 +13,7 @@ Usage:
     print(browser.render())
 """
 
-from cli_browser import CLIBrowser, PageState, PageElement
+from webcli import CLIBrowser, PageState, PageElement
 
 __version__ = "0.1.0"
 __all__ = ["CLIBrowser", "PageState", "PageElement"]
