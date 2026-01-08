@@ -99,23 +99,54 @@ playwright install chromium
 
 ## Quick Start
 
-### As MCP Server (Claude Desktop)
+### As MCP Server (Recommended)
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+WebCLI is designed to be used as an MCP server, giving AI assistants the ability to browse the web.
+
+#### Claude Desktop
+
+Add to your Claude Desktop config:
+
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+**Linux:** `~/.config/Claude/claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "webcli": {
-      "command": "/path/to/webcli/venv/bin/python",
-      "args": ["/path/to/webcli/mcp_server.py"]
+      "command": "/absolute/path/to/webcli/venv/bin/python",
+      "args": ["/absolute/path/to/webcli/mcp_server.py"]
     }
   }
 }
 ```
 
-Then ask Claude:
-> "Go to news.ycombinator.com and click on the top story"
+> **Important:** Use absolute paths. Restart Claude Desktop after editing.
+
+#### Claude Code (CLI)
+
+Add to `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "webcli": {
+      "command": "/absolute/path/to/webcli/venv/bin/python",
+      "args": ["/absolute/path/to/webcli/mcp_server.py"]
+    }
+  }
+}
+```
+
+#### Test it
+
+Once configured, ask Claude:
+> "Go to news.ycombinator.com and tell me the top 3 stories"
+
+> "Search Amazon for mechanical keyboards under $100"
+
+> "Go to github.com/anthropics/claude-code and read the README"
 
 ### As CLI
 
