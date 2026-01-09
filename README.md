@@ -15,9 +15,13 @@
 ╚═══════════════════════════════════════════════════════════════════╝
 ```
 
-Text-mode web browser for AI agents. Converts websites to BBS-style menus.
+**WebCLI** is a text-mode web browser designed for AI agents.
 
-~500 tokens per page instead of 50,000+. No screenshots needed.
+It converts modern websites into **BBS-style, numbered text menus**, so LLMs can navigate the web using the same format they already reason in: text.
+
+No screenshots.  
+No raw HTML dumps.  
+No brittle selectors.
 
 ![WebCLI Demo](assets/webcli.gif)
 
@@ -26,15 +30,25 @@ Text-mode web browser for AI agents. Converts websites to BBS-style menus.
 
 ---
 
-## Why
+## Why This Exists
 
-AI web agents use screenshots + vision. That's expensive and slow.
+Working with browsers + LLMs today is painful.
 
-| Approach | Tokens/page |
-|----------|-------------|
-| Screenshots + Vision | 10,000 - 50,000+ |
-| Raw HTML | 50,000+ |
-| **WebCLI** | **~500** |
+Most agent setups:
+- rely on screenshots + vision models
+- or feed raw HTML full of JavaScript, hidden nodes, and noise
+
+Both approaches are:
+- expensive
+- slow
+- hard for models to reason about
+- fragile across sites
+
+I built WebCLI after repeatedly hitting these problems while experimenting with browser-based agents.
+
+This project explores a different idea: **what if the browser spoke the same language as the agent?**
+
+---
 
 ## What It Does
 
@@ -52,7 +66,7 @@ Into this:
 [L15] 113 comments
 ```
 
-AI reads the text, uses `click L10` to navigate. Simple.
+This keeps interaction deterministic, readable, and cheap.
 
 ## Installation
 
